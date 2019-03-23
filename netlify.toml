@@ -2,6 +2,3 @@
   publish = "public"
   Functions = "functions"
   command = "npm run build"
-[build.environment]
-  YARN_VERSION = "1.9.4"
-  YARN_FLAGS = "--no-ignore-optional"
