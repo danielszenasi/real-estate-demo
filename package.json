@@ -28,7 +28,8 @@
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-helmet": "^5.2.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "prisma-client-lib": "1.29.1"
   },
   "keywords": [
     "gatsby"

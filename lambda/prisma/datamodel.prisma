@@ -1,0 +1,33 @@
+type Address {
+  id: ID! @unique
+  number: String
+  prefix: String
+  street: String
+  type: String
+  city: String
+  state: String
+  zip: String
+  latitude: Float
+  longitude: Float
+}
+
+type Listing {
+  id: ID! @unique
+  description: String
+  price: Float
+  propertyType: String
+  yearBuilt: Int
+  address: Address!
+  building: Building
+  neighborhood: Neighborhood
+}
+
+type Building {
+id: ID! @unique
+ name: String! @unique
+}
+
+type Neighborhood {
+  id: ID! @unique
+  name: String! @unique
+}
