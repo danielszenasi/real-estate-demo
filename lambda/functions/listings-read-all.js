@@ -1,4 +1,4 @@
-const { prisma } = require('../generated/prisma-client')
+import prisma from '../generated/prisma-client'
 
 exports.handler = async function (event, context, callback) {
   const body = JSON.stringify(await prisma.listings());
