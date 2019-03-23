@@ -5,5 +5,7 @@ node_modules
 # Build directory
 public/
 static/admin/*.bundle.*
+functions
+.netlify
 .DS_Store
 yarn-error.log

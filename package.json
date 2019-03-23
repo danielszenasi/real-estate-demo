@@ -51,7 +51,8 @@
     "format": "prettier --trailing-comma es5 --no-semi --single-quote --write \"{gatsby-*.js,src/**/*.js}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy:draft": "netlify deploy --dir=public --functions=functions",
-    "deploy:prod": "netlify deploy --dir=public --functions=functions --prod"
+    "deploy:prod": "netlify deploy --dir=public --functions=functions --prod",
+    "prisma": "prisma"
   },
   "devDependencies": {
     "@netlify/zip-it-and-ship-it": "^0.2.1",
