@@ -27,10 +27,13 @@ exports.handler = function (event, context, callback) {
                         zip: listing.Zip,
                         latitude: parseFloat(listing.Latitude),
                         longitude: parseFloat(listing.Longitude),
-                        number: listing.UnitNumber
+                        unit: listing.UnitNumber,
+                        city: listing.City,
                     }
                     return prisma.createListing({
                         address: { create: { ...address } },
+                        building: { create: { name: listing.BuildingName } },
+                        neighborhood: { create: { name: listing.Neighborhood } },
                         description: listing.MarketingDescription,
                         price: parseFloat(listing.OriginalPrice),
                         propertyType: listing.PropertyType,

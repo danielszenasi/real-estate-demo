@@ -3,6 +3,7 @@ type Address {
   number: String
   prefix: String
   street: String
+  unit: String
   type: String
   city: String
   state: String

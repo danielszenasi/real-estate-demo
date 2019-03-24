@@ -8,6 +8,7 @@ module.exports = {
   number: String
   prefix: String
   street: String
+  unit: String
   type: String
   city: String
   state: String
@@ -26,6 +27,7 @@ input AddressCreateInput {
   number: String
   prefix: String
   street: String
+  unit: String
   type: String
   city: String
   state: String
@@ -53,6 +55,8 @@ enum AddressOrderByInput {
   prefix_DESC
   street_ASC
   street_DESC
+  unit_ASC
+  unit_DESC
   type_ASC
   type_DESC
   city_ASC
@@ -76,6 +80,7 @@ type AddressPreviousValues {
   number: String
   prefix: String
   street: String
+  unit: String
   type: String
   city: String
   state: String
@@ -106,6 +111,7 @@ input AddressUpdateDataInput {
   number: String
   prefix: String
   street: String
+  unit: String
   type: String
   city: String
   state: String
@@ -118,6 +124,7 @@ input AddressUpdateInput {
   number: String
   prefix: String
   street: String
+  unit: String
   type: String
   city: String
   state: String
@@ -130,6 +137,7 @@ input AddressUpdateManyMutationInput {
   number: String
   prefix: String
   street: String
+  unit: String
   type: String
   city: String
   state: String
@@ -207,6 +215,20 @@ input AddressWhereInput {
   street_not_starts_with: String
   street_ends_with: String
   street_not_ends_with: String
+  unit: String
+  unit_not: String
+  unit_in: [String!]
+  unit_not_in: [String!]
+  unit_lt: String
+  unit_lte: String
+  unit_gt: String
+  unit_gte: String
+  unit_contains: String
+  unit_not_contains: String
+  unit_starts_with: String
+  unit_not_starts_with: String
+  unit_ends_with: String
+  unit_not_ends_with: String
   type: String
   type_not: String
   type_in: [String!]
