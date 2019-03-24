@@ -2,7 +2,9 @@ module.exports = /* GraphQL */ `
   scalar JSON
 
   type Query {
-    listings: [Listing!]!
+    listings(neighborhoodId: ID, propertyTypeId: ID): [Listing!]!
+    neighborhoods: [Neighborhood!]!
+    propertyTypes: [PropertyType!]!
   }
   type Address {
   id: ID!

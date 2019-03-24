@@ -21,6 +21,7 @@
     "gatsby-transformer-remark": "^2.3.4",
     "gatsby-transformer-sharp": "^2.1.9",
     "graphql": "^14.1.1",
+    "graphql-request": "^1.8.2",
     "graphql-type-json": "^0.2.2",
     "graphql-yoga": "1.17.4",
     "lodash": "^4.17.5",
@@ -35,6 +36,7 @@
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-helmet": "^5.2.0",
+    "react-image-gallery": "^0.8.14",
     "rets-client": "^5.2.3",
     "uuid": "^3.2.1"
   },
