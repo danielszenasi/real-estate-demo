@@ -4,4 +4,32 @@ module.exports = {
             return context.prisma.listings();
         }
     },
+    Listing: {
+        address: (parent, { id }, context) => {
+            return context.prisma
+                .listing({
+                    id: parent.id
+                })
+                .address();
+        },
+        priceFormatted: parent => numeral(1000).format('$0,0.00'),
+    },
+    Address: {
+        display: parent => {
+            var Directional = {
+                "N": "North",
+                "NE": "Northeast",
+                "E": "East",
+                "SE": "Southeast",
+                "S": "South",
+                "SW": "Southwest",
+                "W": "West",
+                "NW": "Northwest",
+            };
+
+            const prefix = parent.prefix ? Directional[parent.prefix] ? Directional[parent.prefix] : parent.prefix : ''
+
+            return `${parent.number} ${prefix} ${parent.street} ${parent.type} ${parent.unit}`
+        }
+    }
 };

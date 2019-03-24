@@ -16,19 +16,28 @@ type Listing {
   id: ID! @unique
   description: String
   price: Float
-  propertyType: String
+  propertyType: PropertyType
   yearBuilt: Int
   address: Address!
   building: Building
   neighborhood: Neighborhood
+  images: Json
+  numberOfBathrooms: Float
+  numberOfBedrooms: Int
+  numberOfRooms: Float
 }
 
 type Building {
-id: ID! @unique
+ id: ID! @unique
  name: String! @unique
 }
 
 type Neighborhood {
+  id: ID! @unique
+  name: String! @unique
+}
+
+type PropertyType {
   id: ID! @unique
   name: String! @unique
 }

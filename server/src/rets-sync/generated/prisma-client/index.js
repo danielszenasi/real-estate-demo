@@ -19,6 +19,10 @@ var models = [
   {
     name: "Neighborhood",
     embedded: false
+  },
+  {
+    name: "PropertyType",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({

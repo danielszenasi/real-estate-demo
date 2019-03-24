@@ -18,6 +18,7 @@ export interface Exists {
   building: (where?: BuildingWhereInput) => Promise<boolean>;
   listing: (where?: ListingWhereInput) => Promise<boolean>;
   neighborhood: (where?: NeighborhoodWhereInput) => Promise<boolean>;
+  propertyType: (where?: PropertyTypeWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -131,6 +132,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => NeighborhoodConnectionPromise;
+  propertyType: (where: PropertyTypeWhereUniqueInput) => PropertyTypePromise;
+  propertyTypes: (
+    args?: {
+      where?: PropertyTypeWhereInput;
+      orderBy?: PropertyTypeOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<PropertyType>;
+  propertyTypesConnection: (
+    args?: {
+      where?: PropertyTypeWhereInput;
+      orderBy?: PropertyTypeOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => PropertyTypeConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -208,6 +232,29 @@ export interface Prisma {
   deleteManyNeighborhoods: (
     where?: NeighborhoodWhereInput
   ) => BatchPayloadPromise;
+  createPropertyType: (data: PropertyTypeCreateInput) => PropertyTypePromise;
+  updatePropertyType: (
+    args: { data: PropertyTypeUpdateInput; where: PropertyTypeWhereUniqueInput }
+  ) => PropertyTypePromise;
+  updateManyPropertyTypes: (
+    args: {
+      data: PropertyTypeUpdateManyMutationInput;
+      where?: PropertyTypeWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertPropertyType: (
+    args: {
+      where: PropertyTypeWhereUniqueInput;
+      create: PropertyTypeCreateInput;
+      update: PropertyTypeUpdateInput;
+    }
+  ) => PropertyTypePromise;
+  deletePropertyType: (
+    where: PropertyTypeWhereUniqueInput
+  ) => PropertyTypePromise;
+  deleteManyPropertyTypes: (
+    where?: PropertyTypeWhereInput
+  ) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -229,6 +276,9 @@ export interface Subscription {
   neighborhood: (
     where?: NeighborhoodSubscriptionWhereInput
   ) => NeighborhoodSubscriptionPayloadSubscription;
+  propertyType: (
+    where?: PropertyTypeSubscriptionWhereInput
+  ) => PropertyTypeSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -238,6 +288,18 @@ export interface ClientConstructor<T> {
 /**
  * Types
  */
+
+export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+
+export type BuildingOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
 
 export type AddressOrderByInput =
   | "id_ASC"
@@ -267,16 +329,6 @@ export type AddressOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type BuildingOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
 export type ListingOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -284,10 +336,16 @@ export type ListingOrderByInput =
   | "description_DESC"
   | "price_ASC"
   | "price_DESC"
-  | "propertyType_ASC"
-  | "propertyType_DESC"
   | "yearBuilt_ASC"
   | "yearBuilt_DESC"
+  | "images_ASC"
+  | "images_DESC"
+  | "numberOfBathrooms_ASC"
+  | "numberOfBathrooms_DESC"
+  | "numberOfBedrooms_ASC"
+  | "numberOfBedrooms_DESC"
+  | "numberOfRooms_ASC"
+  | "numberOfRooms_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -303,7 +361,363 @@ export type NeighborhoodOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+export type PropertyTypeOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export interface NeighborhoodWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: NeighborhoodWhereInput[] | NeighborhoodWhereInput;
+  OR?: NeighborhoodWhereInput[] | NeighborhoodWhereInput;
+  NOT?: NeighborhoodWhereInput[] | NeighborhoodWhereInput;
+}
+
+export interface PropertyTypeCreateInput {
+  name: String;
+}
+
+export interface AddressUpdateOneRequiredInput {
+  create?: AddressCreateInput;
+  update?: AddressUpdateDataInput;
+  upsert?: AddressUpsertNestedInput;
+  connect?: AddressWhereUniqueInput;
+}
+
+export type AddressWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export type NeighborhoodWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface AddressSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: AddressWhereInput;
+  AND?: AddressSubscriptionWhereInput[] | AddressSubscriptionWhereInput;
+  OR?: AddressSubscriptionWhereInput[] | AddressSubscriptionWhereInput;
+  NOT?: AddressSubscriptionWhereInput[] | AddressSubscriptionWhereInput;
+}
+
+export interface ListingSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ListingWhereInput;
+  AND?: ListingSubscriptionWhereInput[] | ListingSubscriptionWhereInput;
+  OR?: ListingSubscriptionWhereInput[] | ListingSubscriptionWhereInput;
+  NOT?: ListingSubscriptionWhereInput[] | ListingSubscriptionWhereInput;
+}
+
+export interface PropertyTypeUpdateInput {
+  name?: String;
+}
+
+export interface PropertyTypeUpsertNestedInput {
+  update: PropertyTypeUpdateDataInput;
+  create: PropertyTypeCreateInput;
+}
+
+export type BuildingWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface PropertyTypeUpdateDataInput {
+  name?: String;
+}
+
+export interface BuildingWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: BuildingWhereInput[] | BuildingWhereInput;
+  OR?: BuildingWhereInput[] | BuildingWhereInput;
+  NOT?: BuildingWhereInput[] | BuildingWhereInput;
+}
+
+export interface PropertyTypeUpdateOneInput {
+  create?: PropertyTypeCreateInput;
+  update?: PropertyTypeUpdateDataInput;
+  upsert?: PropertyTypeUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: PropertyTypeWhereUniqueInput;
+}
+
+export interface ListingUpdateManyMutationInput {
+  description?: String;
+  price?: Float;
+  yearBuilt?: Int;
+  images?: Json;
+  numberOfBathrooms?: Float;
+  numberOfBedrooms?: Int;
+  numberOfRooms?: Float;
+}
+
+export type PropertyTypeWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface NeighborhoodUpdateDataInput {
+  name?: String;
+}
+
+export interface NeighborhoodSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: NeighborhoodWhereInput;
+  AND?:
+    | NeighborhoodSubscriptionWhereInput[]
+    | NeighborhoodSubscriptionWhereInput;
+  OR?:
+    | NeighborhoodSubscriptionWhereInput[]
+    | NeighborhoodSubscriptionWhereInput;
+  NOT?:
+    | NeighborhoodSubscriptionWhereInput[]
+    | NeighborhoodSubscriptionWhereInput;
+}
+
+export interface NeighborhoodUpdateOneInput {
+  create?: NeighborhoodCreateInput;
+  update?: NeighborhoodUpdateDataInput;
+  upsert?: NeighborhoodUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: NeighborhoodWhereUniqueInput;
+}
+
+export interface ListingUpdateInput {
+  description?: String;
+  price?: Float;
+  propertyType?: PropertyTypeUpdateOneInput;
+  yearBuilt?: Int;
+  address?: AddressUpdateOneRequiredInput;
+  building?: BuildingUpdateOneInput;
+  neighborhood?: NeighborhoodUpdateOneInput;
+  images?: Json;
+  numberOfBathrooms?: Float;
+  numberOfBedrooms?: Int;
+  numberOfRooms?: Float;
+}
+
+export interface BuildingUpdateDataInput {
+  name?: String;
+}
+
+export interface NeighborhoodCreateInput {
+  name: String;
+}
+
+export interface ListingWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  description?: String;
+  description_not?: String;
+  description_in?: String[] | String;
+  description_not_in?: String[] | String;
+  description_lt?: String;
+  description_lte?: String;
+  description_gt?: String;
+  description_gte?: String;
+  description_contains?: String;
+  description_not_contains?: String;
+  description_starts_with?: String;
+  description_not_starts_with?: String;
+  description_ends_with?: String;
+  description_not_ends_with?: String;
+  price?: Float;
+  price_not?: Float;
+  price_in?: Float[] | Float;
+  price_not_in?: Float[] | Float;
+  price_lt?: Float;
+  price_lte?: Float;
+  price_gt?: Float;
+  price_gte?: Float;
+  propertyType?: PropertyTypeWhereInput;
+  yearBuilt?: Int;
+  yearBuilt_not?: Int;
+  yearBuilt_in?: Int[] | Int;
+  yearBuilt_not_in?: Int[] | Int;
+  yearBuilt_lt?: Int;
+  yearBuilt_lte?: Int;
+  yearBuilt_gt?: Int;
+  yearBuilt_gte?: Int;
+  address?: AddressWhereInput;
+  building?: BuildingWhereInput;
+  neighborhood?: NeighborhoodWhereInput;
+  numberOfBathrooms?: Float;
+  numberOfBathrooms_not?: Float;
+  numberOfBathrooms_in?: Float[] | Float;
+  numberOfBathrooms_not_in?: Float[] | Float;
+  numberOfBathrooms_lt?: Float;
+  numberOfBathrooms_lte?: Float;
+  numberOfBathrooms_gt?: Float;
+  numberOfBathrooms_gte?: Float;
+  numberOfBedrooms?: Int;
+  numberOfBedrooms_not?: Int;
+  numberOfBedrooms_in?: Int[] | Int;
+  numberOfBedrooms_not_in?: Int[] | Int;
+  numberOfBedrooms_lt?: Int;
+  numberOfBedrooms_lte?: Int;
+  numberOfBedrooms_gt?: Int;
+  numberOfBedrooms_gte?: Int;
+  numberOfRooms?: Float;
+  numberOfRooms_not?: Float;
+  numberOfRooms_in?: Float[] | Float;
+  numberOfRooms_not_in?: Float[] | Float;
+  numberOfRooms_lt?: Float;
+  numberOfRooms_lte?: Float;
+  numberOfRooms_gt?: Float;
+  numberOfRooms_gte?: Float;
+  AND?: ListingWhereInput[] | ListingWhereInput;
+  OR?: ListingWhereInput[] | ListingWhereInput;
+  NOT?: ListingWhereInput[] | ListingWhereInput;
+}
+
+export interface NeighborhoodCreateOneInput {
+  create?: NeighborhoodCreateInput;
+  connect?: NeighborhoodWhereUniqueInput;
+}
+
+export interface PropertyTypeSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: PropertyTypeWhereInput;
+  AND?:
+    | PropertyTypeSubscriptionWhereInput[]
+    | PropertyTypeSubscriptionWhereInput;
+  OR?:
+    | PropertyTypeSubscriptionWhereInput[]
+    | PropertyTypeSubscriptionWhereInput;
+  NOT?:
+    | PropertyTypeSubscriptionWhereInput[]
+    | PropertyTypeSubscriptionWhereInput;
+}
+
+export interface AddressUpsertNestedInput {
+  update: AddressUpdateDataInput;
+  create: AddressCreateInput;
+}
+
+export interface PropertyTypeUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface AddressCreateInput {
+  number?: String;
+  prefix?: String;
+  street?: String;
+  unit?: String;
+  type?: String;
+  city?: String;
+  state?: String;
+  zip?: String;
+  latitude?: Float;
+  longitude?: Float;
+}
+
+export interface NeighborhoodUpdateInput {
+  name?: String;
+}
+
+export interface AddressUpdateInput {
+  number?: String;
+  prefix?: String;
+  street?: String;
+  unit?: String;
+  type?: String;
+  city?: String;
+  state?: String;
+  zip?: String;
+  latitude?: Float;
+  longitude?: Float;
+}
+
+export interface NeighborhoodUpsertNestedInput {
+  update: NeighborhoodUpdateDataInput;
+  create: NeighborhoodCreateInput;
+}
 
 export interface AddressUpdateManyMutationInput {
   number?: String;
@@ -318,70 +732,53 @@ export interface AddressUpdateManyMutationInput {
   longitude?: Float;
 }
 
-export type AddressWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
 export interface BuildingUpsertNestedInput {
   update: BuildingUpdateDataInput;
   create: BuildingCreateInput;
 }
 
-export interface BuildingUpdateManyMutationInput {
-  name?: String;
-}
-
-export interface BuildingUpdateDataInput {
-  name?: String;
-}
-
-export interface BuildingCreateInput {
-  name: String;
-}
-
-export interface BuildingUpdateOneInput {
+export interface BuildingCreateOneInput {
   create?: BuildingCreateInput;
-  update?: BuildingUpdateDataInput;
-  upsert?: BuildingUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
   connect?: BuildingWhereUniqueInput;
 }
 
-export interface ListingSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ListingWhereInput;
-  AND?: ListingSubscriptionWhereInput[] | ListingSubscriptionWhereInput;
-  OR?: ListingSubscriptionWhereInput[] | ListingSubscriptionWhereInput;
-  NOT?: ListingSubscriptionWhereInput[] | ListingSubscriptionWhereInput;
-}
-
-export interface AddressUpsertNestedInput {
-  update: AddressUpdateDataInput;
-  create: AddressCreateInput;
-}
-
-export interface AddressSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: AddressWhereInput;
-  AND?: AddressSubscriptionWhereInput[] | AddressSubscriptionWhereInput;
-  OR?: AddressSubscriptionWhereInput[] | AddressSubscriptionWhereInput;
-  NOT?: AddressSubscriptionWhereInput[] | AddressSubscriptionWhereInput;
-}
-
-export type NeighborhoodWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
+export interface PropertyTypeWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
   name?: String;
-}>;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: PropertyTypeWhereInput[] | PropertyTypeWhereInput;
+  OR?: PropertyTypeWhereInput[] | PropertyTypeWhereInput;
+  NOT?: PropertyTypeWhereInput[] | PropertyTypeWhereInput;
+}
 
-export interface NeighborhoodUpdateManyMutationInput {
-  name?: String;
+export interface AddressCreateOneInput {
+  create?: AddressCreateInput;
+  connect?: AddressWhereUniqueInput;
 }
 
 export interface AddressUpdateDataInput {
@@ -395,6 +792,56 @@ export interface AddressUpdateDataInput {
   zip?: String;
   latitude?: Float;
   longitude?: Float;
+}
+
+export interface BuildingCreateInput {
+  name: String;
+}
+
+export interface BuildingSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: BuildingWhereInput;
+  AND?: BuildingSubscriptionWhereInput[] | BuildingSubscriptionWhereInput;
+  OR?: BuildingSubscriptionWhereInput[] | BuildingSubscriptionWhereInput;
+  NOT?: BuildingSubscriptionWhereInput[] | BuildingSubscriptionWhereInput;
+}
+
+export interface PropertyTypeCreateOneInput {
+  create?: PropertyTypeCreateInput;
+  connect?: PropertyTypeWhereUniqueInput;
+}
+
+export interface ListingCreateInput {
+  description?: String;
+  price?: Float;
+  propertyType?: PropertyTypeCreateOneInput;
+  yearBuilt?: Int;
+  address: AddressCreateOneInput;
+  building?: BuildingCreateOneInput;
+  neighborhood?: NeighborhoodCreateOneInput;
+  images?: Json;
+  numberOfBathrooms?: Float;
+  numberOfBedrooms?: Int;
+  numberOfRooms?: Float;
+}
+
+export interface BuildingUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface BuildingUpdateInput {
+  name?: String;
+}
+
+export type ListingWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface NeighborhoodUpdateManyMutationInput {
+  name?: String;
 }
 
 export interface AddressWhereInput {
@@ -545,365 +992,17 @@ export interface AddressWhereInput {
   NOT?: AddressWhereInput[] | AddressWhereInput;
 }
 
-export interface AddressUpdateOneRequiredInput {
-  create?: AddressCreateInput;
-  update?: AddressUpdateDataInput;
-  upsert?: AddressUpsertNestedInput;
-  connect?: AddressWhereUniqueInput;
-}
-
-export interface ListingUpdateManyMutationInput {
-  description?: String;
-  price?: Float;
-  propertyType?: String;
-  yearBuilt?: Int;
-}
-
-export interface ListingUpdateInput {
-  description?: String;
-  price?: Float;
-  propertyType?: String;
-  yearBuilt?: Int;
-  address?: AddressUpdateOneRequiredInput;
-  building?: BuildingUpdateOneInput;
-  neighborhood?: NeighborhoodUpdateOneInput;
-}
-
-export type ListingWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface NeighborhoodCreateInput {
-  name: String;
-}
-
-export interface NeighborhoodUpdateOneInput {
-  create?: NeighborhoodCreateInput;
-  update?: NeighborhoodUpdateDataInput;
-  upsert?: NeighborhoodUpsertNestedInput;
+export interface BuildingUpdateOneInput {
+  create?: BuildingCreateInput;
+  update?: BuildingUpdateDataInput;
+  upsert?: BuildingUpsertNestedInput;
   delete?: Boolean;
   disconnect?: Boolean;
-  connect?: NeighborhoodWhereUniqueInput;
-}
-
-export interface NeighborhoodWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  AND?: NeighborhoodWhereInput[] | NeighborhoodWhereInput;
-  OR?: NeighborhoodWhereInput[] | NeighborhoodWhereInput;
-  NOT?: NeighborhoodWhereInput[] | NeighborhoodWhereInput;
-}
-
-export interface BuildingSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: BuildingWhereInput;
-  AND?: BuildingSubscriptionWhereInput[] | BuildingSubscriptionWhereInput;
-  OR?: BuildingSubscriptionWhereInput[] | BuildingSubscriptionWhereInput;
-  NOT?: BuildingSubscriptionWhereInput[] | BuildingSubscriptionWhereInput;
-}
-
-export interface AddressCreateInput {
-  number?: String;
-  prefix?: String;
-  street?: String;
-  unit?: String;
-  type?: String;
-  city?: String;
-  state?: String;
-  zip?: String;
-  latitude?: Float;
-  longitude?: Float;
-}
-
-export interface BuildingWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  AND?: BuildingWhereInput[] | BuildingWhereInput;
-  OR?: BuildingWhereInput[] | BuildingWhereInput;
-  NOT?: BuildingWhereInput[] | BuildingWhereInput;
-}
-
-export interface AddressUpdateInput {
-  number?: String;
-  prefix?: String;
-  street?: String;
-  unit?: String;
-  type?: String;
-  city?: String;
-  state?: String;
-  zip?: String;
-  latitude?: Float;
-  longitude?: Float;
-}
-
-export interface NeighborhoodUpsertNestedInput {
-  update: NeighborhoodUpdateDataInput;
-  create: NeighborhoodCreateInput;
-}
-
-export interface NeighborhoodCreateOneInput {
-  create?: NeighborhoodCreateInput;
-  connect?: NeighborhoodWhereUniqueInput;
-}
-
-export interface ListingWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  description?: String;
-  description_not?: String;
-  description_in?: String[] | String;
-  description_not_in?: String[] | String;
-  description_lt?: String;
-  description_lte?: String;
-  description_gt?: String;
-  description_gte?: String;
-  description_contains?: String;
-  description_not_contains?: String;
-  description_starts_with?: String;
-  description_not_starts_with?: String;
-  description_ends_with?: String;
-  description_not_ends_with?: String;
-  price?: Float;
-  price_not?: Float;
-  price_in?: Float[] | Float;
-  price_not_in?: Float[] | Float;
-  price_lt?: Float;
-  price_lte?: Float;
-  price_gt?: Float;
-  price_gte?: Float;
-  propertyType?: String;
-  propertyType_not?: String;
-  propertyType_in?: String[] | String;
-  propertyType_not_in?: String[] | String;
-  propertyType_lt?: String;
-  propertyType_lte?: String;
-  propertyType_gt?: String;
-  propertyType_gte?: String;
-  propertyType_contains?: String;
-  propertyType_not_contains?: String;
-  propertyType_starts_with?: String;
-  propertyType_not_starts_with?: String;
-  propertyType_ends_with?: String;
-  propertyType_not_ends_with?: String;
-  yearBuilt?: Int;
-  yearBuilt_not?: Int;
-  yearBuilt_in?: Int[] | Int;
-  yearBuilt_not_in?: Int[] | Int;
-  yearBuilt_lt?: Int;
-  yearBuilt_lte?: Int;
-  yearBuilt_gt?: Int;
-  yearBuilt_gte?: Int;
-  address?: AddressWhereInput;
-  building?: BuildingWhereInput;
-  neighborhood?: NeighborhoodWhereInput;
-  AND?: ListingWhereInput[] | ListingWhereInput;
-  OR?: ListingWhereInput[] | ListingWhereInput;
-  NOT?: ListingWhereInput[] | ListingWhereInput;
-}
-
-export interface BuildingUpdateInput {
-  name?: String;
-}
-
-export interface ListingCreateInput {
-  description?: String;
-  price?: Float;
-  propertyType?: String;
-  yearBuilt?: Int;
-  address: AddressCreateOneInput;
-  building?: BuildingCreateOneInput;
-  neighborhood?: NeighborhoodCreateOneInput;
-}
-
-export interface AddressCreateOneInput {
-  create?: AddressCreateInput;
-  connect?: AddressWhereUniqueInput;
-}
-
-export interface BuildingCreateOneInput {
-  create?: BuildingCreateInput;
   connect?: BuildingWhereUniqueInput;
 }
 
-export interface NeighborhoodSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: NeighborhoodWhereInput;
-  AND?:
-    | NeighborhoodSubscriptionWhereInput[]
-    | NeighborhoodSubscriptionWhereInput;
-  OR?:
-    | NeighborhoodSubscriptionWhereInput[]
-    | NeighborhoodSubscriptionWhereInput;
-  NOT?:
-    | NeighborhoodSubscriptionWhereInput[]
-    | NeighborhoodSubscriptionWhereInput;
-}
-
-export interface NeighborhoodUpdateDataInput {
-  name?: String;
-}
-
-export interface NeighborhoodUpdateInput {
-  name?: String;
-}
-
-export type BuildingWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
 export interface NodeNode {
   id: ID_Output;
-}
-
-export interface NeighborhoodPreviousValues {
-  id: ID_Output;
-  name: String;
-}
-
-export interface NeighborhoodPreviousValuesPromise
-  extends Promise<NeighborhoodPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface NeighborhoodPreviousValuesSubscription
-  extends Promise<AsyncIterator<NeighborhoodPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface BuildingEdge {
-  node: Building;
-  cursor: String;
-}
-
-export interface BuildingEdgePromise
-  extends Promise<BuildingEdge>,
-    Fragmentable {
-  node: <T = BuildingPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface BuildingEdgeSubscription
-  extends Promise<AsyncIterator<BuildingEdge>>,
-    Fragmentable {
-  node: <T = BuildingSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AddressConnection {
-  pageInfo: PageInfo;
-  edges: AddressEdge[];
-}
-
-export interface AddressConnectionPromise
-  extends Promise<AddressConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<AddressEdge>>() => T;
-  aggregate: <T = AggregateAddressPromise>() => T;
-}
-
-export interface AddressConnectionSubscription
-  extends Promise<AsyncIterator<AddressConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<AddressEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateAddressSubscription>() => T;
-}
-
-export interface BuildingConnection {
-  pageInfo: PageInfo;
-  edges: BuildingEdge[];
-}
-
-export interface BuildingConnectionPromise
-  extends Promise<BuildingConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<BuildingEdge>>() => T;
-  aggregate: <T = AggregateBuildingPromise>() => T;
-}
-
-export interface BuildingConnectionSubscription
-  extends Promise<AsyncIterator<BuildingConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<BuildingEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateBuildingSubscription>() => T;
 }
 
 export interface BatchPayload {
@@ -920,6 +1019,74 @@ export interface BatchPayloadSubscription
   extends Promise<AsyncIterator<BatchPayload>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface AggregateAddress {
+  count: Int;
+}
+
+export interface AggregateAddressPromise
+  extends Promise<AggregateAddress>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateAddressSubscription
+  extends Promise<AsyncIterator<AggregateAddress>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PropertyTypePreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface PropertyTypePreviousValuesPromise
+  extends Promise<PropertyTypePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface PropertyTypePreviousValuesSubscription
+  extends Promise<AsyncIterator<PropertyTypePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AddressEdge {
+  node: Address;
+  cursor: String;
+}
+
+export interface AddressEdgePromise extends Promise<AddressEdge>, Fragmentable {
+  node: <T = AddressPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface AddressEdgeSubscription
+  extends Promise<AsyncIterator<AddressEdge>>,
+    Fragmentable {
+  node: <T = AddressSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregatePropertyType {
+  count: Int;
+}
+
+export interface AggregatePropertyTypePromise
+  extends Promise<AggregatePropertyType>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePropertyTypeSubscription
+  extends Promise<AsyncIterator<AggregatePropertyType>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface Building {
@@ -939,57 +1106,41 @@ export interface BuildingSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateNeighborhood {
-  count: Int;
+export interface ListingPreviousValues {
+  id: ID_Output;
+  description?: String;
+  price?: Float;
+  yearBuilt?: Int;
+  images?: Json;
+  numberOfBathrooms?: Float;
+  numberOfBedrooms?: Int;
+  numberOfRooms?: Float;
 }
 
-export interface AggregateNeighborhoodPromise
-  extends Promise<AggregateNeighborhood>,
+export interface ListingPreviousValuesPromise
+  extends Promise<ListingPreviousValues>,
     Fragmentable {
-  count: () => Promise<Int>;
+  id: () => Promise<ID_Output>;
+  description: () => Promise<String>;
+  price: () => Promise<Float>;
+  yearBuilt: () => Promise<Int>;
+  images: () => Promise<Json>;
+  numberOfBathrooms: () => Promise<Float>;
+  numberOfBedrooms: () => Promise<Int>;
+  numberOfRooms: () => Promise<Float>;
 }
 
-export interface AggregateNeighborhoodSubscription
-  extends Promise<AsyncIterator<AggregateNeighborhood>>,
+export interface ListingPreviousValuesSubscription
+  extends Promise<AsyncIterator<ListingPreviousValues>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregateAddress {
-  count: Int;
-}
-
-export interface AggregateAddressPromise
-  extends Promise<AggregateAddress>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateAddressSubscription
-  extends Promise<AsyncIterator<AggregateAddress>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface NeighborhoodConnection {
-  pageInfo: PageInfo;
-  edges: NeighborhoodEdge[];
-}
-
-export interface NeighborhoodConnectionPromise
-  extends Promise<NeighborhoodConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<NeighborhoodEdge>>() => T;
-  aggregate: <T = AggregateNeighborhoodPromise>() => T;
-}
-
-export interface NeighborhoodConnectionSubscription
-  extends Promise<AsyncIterator<NeighborhoodConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<NeighborhoodEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateNeighborhoodSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  description: () => Promise<AsyncIterator<String>>;
+  price: () => Promise<AsyncIterator<Float>>;
+  yearBuilt: () => Promise<AsyncIterator<Int>>;
+  images: () => Promise<AsyncIterator<Json>>;
+  numberOfBathrooms: () => Promise<AsyncIterator<Float>>;
+  numberOfBedrooms: () => Promise<AsyncIterator<Int>>;
+  numberOfRooms: () => Promise<AsyncIterator<Float>>;
 }
 
 export interface Address {
@@ -1036,20 +1187,186 @@ export interface AddressSubscription
   longitude: () => Promise<AsyncIterator<Float>>;
 }
 
-export interface AggregateListing {
+export interface PropertyTypeConnection {
+  pageInfo: PageInfo;
+  edges: PropertyTypeEdge[];
+}
+
+export interface PropertyTypeConnectionPromise
+  extends Promise<PropertyTypeConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<PropertyTypeEdge>>() => T;
+  aggregate: <T = AggregatePropertyTypePromise>() => T;
+}
+
+export interface PropertyTypeConnectionSubscription
+  extends Promise<AsyncIterator<PropertyTypeConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<PropertyTypeEdgeSubscription>>>() => T;
+  aggregate: <T = AggregatePropertyTypeSubscription>() => T;
+}
+
+export interface PropertyTypeEdge {
+  node: PropertyType;
+  cursor: String;
+}
+
+export interface PropertyTypeEdgePromise
+  extends Promise<PropertyTypeEdge>,
+    Fragmentable {
+  node: <T = PropertyTypePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface PropertyTypeEdgeSubscription
+  extends Promise<AsyncIterator<PropertyTypeEdge>>,
+    Fragmentable {
+  node: <T = PropertyTypeSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface NeighborhoodConnection {
+  pageInfo: PageInfo;
+  edges: NeighborhoodEdge[];
+}
+
+export interface NeighborhoodConnectionPromise
+  extends Promise<NeighborhoodConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<NeighborhoodEdge>>() => T;
+  aggregate: <T = AggregateNeighborhoodPromise>() => T;
+}
+
+export interface NeighborhoodConnectionSubscription
+  extends Promise<AsyncIterator<NeighborhoodConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<NeighborhoodEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateNeighborhoodSubscription>() => T;
+}
+
+export interface AggregateNeighborhood {
   count: Int;
 }
 
-export interface AggregateListingPromise
-  extends Promise<AggregateListing>,
+export interface AggregateNeighborhoodPromise
+  extends Promise<AggregateNeighborhood>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateListingSubscription
-  extends Promise<AsyncIterator<AggregateListing>>,
+export interface AggregateNeighborhoodSubscription
+  extends Promise<AsyncIterator<AggregateNeighborhood>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface ListingEdge {
+  node: Listing;
+  cursor: String;
+}
+
+export interface ListingEdgePromise extends Promise<ListingEdge>, Fragmentable {
+  node: <T = ListingPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ListingEdgeSubscription
+  extends Promise<AsyncIterator<ListingEdge>>,
+    Fragmentable {
+  node: <T = ListingSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PropertyTypeSubscriptionPayload {
+  mutation: MutationType;
+  node: PropertyType;
+  updatedFields: String[];
+  previousValues: PropertyTypePreviousValues;
+}
+
+export interface PropertyTypeSubscriptionPayloadPromise
+  extends Promise<PropertyTypeSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = PropertyTypePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PropertyTypePreviousValuesPromise>() => T;
+}
+
+export interface PropertyTypeSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PropertyTypeSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PropertyTypeSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PropertyTypePreviousValuesSubscription>() => T;
+}
+
+export interface AddressConnection {
+  pageInfo: PageInfo;
+  edges: AddressEdge[];
+}
+
+export interface AddressConnectionPromise
+  extends Promise<AddressConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<AddressEdge>>() => T;
+  aggregate: <T = AggregateAddressPromise>() => T;
+}
+
+export interface AddressConnectionSubscription
+  extends Promise<AsyncIterator<AddressConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<AddressEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateAddressSubscription>() => T;
+}
+
+export interface PropertyType {
+  id: ID_Output;
+  name: String;
+}
+
+export interface PropertyTypePromise
+  extends Promise<PropertyType>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface PropertyTypeSubscription
+  extends Promise<AsyncIterator<PropertyType>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AddressSubscriptionPayload {
@@ -1077,25 +1394,20 @@ export interface AddressSubscriptionPayloadSubscription
   previousValues: <T = AddressPreviousValuesSubscription>() => T;
 }
 
-export interface ListingConnection {
-  pageInfo: PageInfo;
-  edges: ListingEdge[];
+export interface AggregateBuilding {
+  count: Int;
 }
 
-export interface ListingConnectionPromise
-  extends Promise<ListingConnection>,
+export interface AggregateBuildingPromise
+  extends Promise<AggregateBuilding>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ListingEdge>>() => T;
-  aggregate: <T = AggregateListingPromise>() => T;
+  count: () => Promise<Int>;
 }
 
-export interface ListingConnectionSubscription
-  extends Promise<AsyncIterator<ListingConnection>>,
+export interface AggregateBuildingSubscription
+  extends Promise<AsyncIterator<AggregateBuilding>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ListingEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateListingSubscription>() => T;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface AddressPreviousValues {
@@ -1144,6 +1456,62 @@ export interface AddressPreviousValuesSubscription
   longitude: () => Promise<AsyncIterator<Float>>;
 }
 
+export interface BuildingConnection {
+  pageInfo: PageInfo;
+  edges: BuildingEdge[];
+}
+
+export interface BuildingConnectionPromise
+  extends Promise<BuildingConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<BuildingEdge>>() => T;
+  aggregate: <T = AggregateBuildingPromise>() => T;
+}
+
+export interface BuildingConnectionSubscription
+  extends Promise<AsyncIterator<BuildingConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<BuildingEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateBuildingSubscription>() => T;
+}
+
+export interface NeighborhoodPreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface NeighborhoodPreviousValuesPromise
+  extends Promise<NeighborhoodPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface NeighborhoodPreviousValuesSubscription
+  extends Promise<AsyncIterator<NeighborhoodPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateListing {
+  count: Int;
+}
+
+export interface AggregateListingPromise
+  extends Promise<AggregateListing>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateListingSubscription
+  extends Promise<AsyncIterator<AggregateListing>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface Neighborhood {
   id: ID_Output;
   name: String;
@@ -1161,39 +1529,6 @@ export interface NeighborhoodSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AddressEdge {
-  node: Address;
-  cursor: String;
-}
-
-export interface AddressEdgePromise extends Promise<AddressEdge>, Fragmentable {
-  node: <T = AddressPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface AddressEdgeSubscription
-  extends Promise<AsyncIterator<AddressEdge>>,
-    Fragmentable {
-  node: <T = AddressSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateBuilding {
-  count: Int;
-}
-
-export interface AggregateBuildingPromise
-  extends Promise<AggregateBuilding>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateBuildingSubscription
-  extends Promise<AsyncIterator<AggregateBuilding>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface ListingSubscriptionPayload {
@@ -1221,144 +1556,6 @@ export interface ListingSubscriptionPayloadSubscription
   previousValues: <T = ListingPreviousValuesSubscription>() => T;
 }
 
-export interface BuildingPreviousValues {
-  id: ID_Output;
-  name: String;
-}
-
-export interface BuildingPreviousValuesPromise
-  extends Promise<BuildingPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface BuildingPreviousValuesSubscription
-  extends Promise<AsyncIterator<BuildingPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface NeighborhoodEdge {
-  node: Neighborhood;
-  cursor: String;
-}
-
-export interface NeighborhoodEdgePromise
-  extends Promise<NeighborhoodEdge>,
-    Fragmentable {
-  node: <T = NeighborhoodPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface NeighborhoodEdgeSubscription
-  extends Promise<AsyncIterator<NeighborhoodEdge>>,
-    Fragmentable {
-  node: <T = NeighborhoodSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ListingPreviousValues {
-  id: ID_Output;
-  description?: String;
-  price?: Float;
-  propertyType?: String;
-  yearBuilt?: Int;
-}
-
-export interface ListingPreviousValuesPromise
-  extends Promise<ListingPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  description: () => Promise<String>;
-  price: () => Promise<Float>;
-  propertyType: () => Promise<String>;
-  yearBuilt: () => Promise<Int>;
-}
-
-export interface ListingPreviousValuesSubscription
-  extends Promise<AsyncIterator<ListingPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  description: () => Promise<AsyncIterator<String>>;
-  price: () => Promise<AsyncIterator<Float>>;
-  propertyType: () => Promise<AsyncIterator<String>>;
-  yearBuilt: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Listing {
-  id: ID_Output;
-  description?: String;
-  price?: Float;
-  propertyType?: String;
-  yearBuilt?: Int;
-}
-
-export interface ListingPromise extends Promise<Listing>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  description: () => Promise<String>;
-  price: () => Promise<Float>;
-  propertyType: () => Promise<String>;
-  yearBuilt: () => Promise<Int>;
-  address: <T = AddressPromise>() => T;
-  building: <T = BuildingPromise>() => T;
-  neighborhood: <T = NeighborhoodPromise>() => T;
-}
-
-export interface ListingSubscription
-  extends Promise<AsyncIterator<Listing>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  description: () => Promise<AsyncIterator<String>>;
-  price: () => Promise<AsyncIterator<Float>>;
-  propertyType: () => Promise<AsyncIterator<String>>;
-  yearBuilt: () => Promise<AsyncIterator<Int>>;
-  address: <T = AddressSubscription>() => T;
-  building: <T = BuildingSubscription>() => T;
-  neighborhood: <T = NeighborhoodSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ListingEdge {
-  node: Listing;
-  cursor: String;
-}
-
-export interface ListingEdgePromise extends Promise<ListingEdge>, Fragmentable {
-  node: <T = ListingPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ListingEdgeSubscription
-  extends Promise<AsyncIterator<ListingEdge>>,
-    Fragmentable {
-  node: <T = ListingSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
 export interface NeighborhoodSubscriptionPayload {
   mutation: MutationType;
   node: Neighborhood;
@@ -1382,6 +1579,25 @@ export interface NeighborhoodSubscriptionPayloadSubscription
   node: <T = NeighborhoodSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
   previousValues: <T = NeighborhoodPreviousValuesSubscription>() => T;
+}
+
+export interface BuildingPreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface BuildingPreviousValuesPromise
+  extends Promise<BuildingPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface BuildingPreviousValuesSubscription
+  extends Promise<AsyncIterator<BuildingPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
 export interface BuildingSubscriptionPayload {
@@ -1409,10 +1625,116 @@ export interface BuildingSubscriptionPayloadSubscription
   previousValues: <T = BuildingPreviousValuesSubscription>() => T;
 }
 
+export interface Listing {
+  id: ID_Output;
+  description?: String;
+  price?: Float;
+  yearBuilt?: Int;
+  images?: Json;
+  numberOfBathrooms?: Float;
+  numberOfBedrooms?: Int;
+  numberOfRooms?: Float;
+}
+
+export interface ListingPromise extends Promise<Listing>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  description: () => Promise<String>;
+  price: () => Promise<Float>;
+  propertyType: <T = PropertyTypePromise>() => T;
+  yearBuilt: () => Promise<Int>;
+  address: <T = AddressPromise>() => T;
+  building: <T = BuildingPromise>() => T;
+  neighborhood: <T = NeighborhoodPromise>() => T;
+  images: () => Promise<Json>;
+  numberOfBathrooms: () => Promise<Float>;
+  numberOfBedrooms: () => Promise<Int>;
+  numberOfRooms: () => Promise<Float>;
+}
+
+export interface ListingSubscription
+  extends Promise<AsyncIterator<Listing>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  description: () => Promise<AsyncIterator<String>>;
+  price: () => Promise<AsyncIterator<Float>>;
+  propertyType: <T = PropertyTypeSubscription>() => T;
+  yearBuilt: () => Promise<AsyncIterator<Int>>;
+  address: <T = AddressSubscription>() => T;
+  building: <T = BuildingSubscription>() => T;
+  neighborhood: <T = NeighborhoodSubscription>() => T;
+  images: () => Promise<AsyncIterator<Json>>;
+  numberOfBathrooms: () => Promise<AsyncIterator<Float>>;
+  numberOfBedrooms: () => Promise<AsyncIterator<Int>>;
+  numberOfRooms: () => Promise<AsyncIterator<Float>>;
+}
+
+export interface ListingConnection {
+  pageInfo: PageInfo;
+  edges: ListingEdge[];
+}
+
+export interface ListingConnectionPromise
+  extends Promise<ListingConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ListingEdge>>() => T;
+  aggregate: <T = AggregateListingPromise>() => T;
+}
+
+export interface ListingConnectionSubscription
+  extends Promise<AsyncIterator<ListingConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ListingEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateListingSubscription>() => T;
+}
+
+export interface NeighborhoodEdge {
+  node: Neighborhood;
+  cursor: String;
+}
+
+export interface NeighborhoodEdgePromise
+  extends Promise<NeighborhoodEdge>,
+    Fragmentable {
+  node: <T = NeighborhoodPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface NeighborhoodEdgeSubscription
+  extends Promise<AsyncIterator<NeighborhoodEdge>>,
+    Fragmentable {
+  node: <T = NeighborhoodSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface BuildingEdge {
+  node: Building;
+  cursor: String;
+}
+
+export interface BuildingEdgePromise
+  extends Promise<BuildingEdge>,
+    Fragmentable {
+  node: <T = BuildingPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface BuildingEdgeSubscription
+  extends Promise<AsyncIterator<BuildingEdge>>,
+    Fragmentable {
+  node: <T = BuildingSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+The `Boolean` scalar type represents `true` or `false`.
 */
-export type Int = number;
+export type Boolean = boolean;
+
+export type Long = string;
+
+export type Json = any;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -1421,21 +1743,19 @@ export type ID_Input = string | number;
 export type ID_Output = string;
 
 /*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
-export type String = string;
+export type Int = number;
 
 /*
 The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). 
 */
 export type Float = number;
 
-export type Long = string;
-
 /*
-The `Boolean` scalar type represents `true` or `false`.
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type Boolean = boolean;
+export type String = string;
 
 /**
  * Model Metadata
@@ -1456,6 +1776,10 @@ export const models: Model[] = [
   },
   {
     name: "Neighborhood",
+    embedded: false
+  },
+  {
+    name: "PropertyType",
     embedded: false
   }
 ];

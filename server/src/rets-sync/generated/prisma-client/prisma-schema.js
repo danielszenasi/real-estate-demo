@@ -326,6 +326,10 @@ type AggregateNeighborhood {
   count: Int!
 }
 
+type AggregatePropertyType {
+  count: Int!
+}
+
 type BatchPayload {
   count: Long!
 }
@@ -454,15 +458,21 @@ input BuildingWhereUniqueInput {
   name: String
 }
 
+scalar Json
+
 type Listing {
   id: ID!
   description: String
   price: Float
-  propertyType: String
+  propertyType: PropertyType
   yearBuilt: Int
   address: Address!
   building: Building
   neighborhood: Neighborhood
+  images: Json
+  numberOfBathrooms: Float
+  numberOfBedrooms: Int
+  numberOfRooms: Float
 }
 
 type ListingConnection {
@@ -474,11 +484,15 @@ type ListingConnection {
 input ListingCreateInput {
   description: String
   price: Float
-  propertyType: String
+  propertyType: PropertyTypeCreateOneInput
   yearBuilt: Int
   address: AddressCreateOneInput!
   building: BuildingCreateOneInput
   neighborhood: NeighborhoodCreateOneInput
+  images: Json
+  numberOfBathrooms: Float
+  numberOfBedrooms: Int
+  numberOfRooms: Float
 }
 
 type ListingEdge {
@@ -493,10 +507,16 @@ enum ListingOrderByInput {
   description_DESC
   price_ASC
   price_DESC
-  propertyType_ASC
-  propertyType_DESC
   yearBuilt_ASC
   yearBuilt_DESC
+  images_ASC
+  images_DESC
+  numberOfBathrooms_ASC
+  numberOfBathrooms_DESC
+  numberOfBedrooms_ASC
+  numberOfBedrooms_DESC
+  numberOfRooms_ASC
+  numberOfRooms_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -507,8 +527,11 @@ type ListingPreviousValues {
   id: ID!
   description: String
   price: Float
-  propertyType: String
   yearBuilt: Int
+  images: Json
+  numberOfBathrooms: Float
+  numberOfBedrooms: Int
+  numberOfRooms: Float
 }
 
 type ListingSubscriptionPayload {
@@ -532,18 +555,25 @@ input ListingSubscriptionWhereInput {
 input ListingUpdateInput {
   description: String
   price: Float
-  propertyType: String
+  propertyType: PropertyTypeUpdateOneInput
   yearBuilt: Int
   address: AddressUpdateOneRequiredInput
   building: BuildingUpdateOneInput
   neighborhood: NeighborhoodUpdateOneInput
+  images: Json
+  numberOfBathrooms: Float
+  numberOfBedrooms: Int
+  numberOfRooms: Float
 }
 
 input ListingUpdateManyMutationInput {
   description: String
   price: Float
-  propertyType: String
   yearBuilt: Int
+  images: Json
+  numberOfBathrooms: Float
+  numberOfBedrooms: Int
+  numberOfRooms: Float
 }
 
 input ListingWhereInput {
@@ -583,20 +613,7 @@ input ListingWhereInput {
   price_lte: Float
   price_gt: Float
   price_gte: Float
-  propertyType: String
-  propertyType_not: String
-  propertyType_in: [String!]
-  propertyType_not_in: [String!]
-  propertyType_lt: String
-  propertyType_lte: String
-  propertyType_gt: String
-  propertyType_gte: String
-  propertyType_contains: String
-  propertyType_not_contains: String
-  propertyType_starts_with: String
-  propertyType_not_starts_with: String
-  propertyType_ends_with: String
-  propertyType_not_ends_with: String
+  propertyType: PropertyTypeWhereInput
   yearBuilt: Int
   yearBuilt_not: Int
   yearBuilt_in: [Int!]
@@ -608,6 +625,30 @@ input ListingWhereInput {
   address: AddressWhereInput
   building: BuildingWhereInput
   neighborhood: NeighborhoodWhereInput
+  numberOfBathrooms: Float
+  numberOfBathrooms_not: Float
+  numberOfBathrooms_in: [Float!]
+  numberOfBathrooms_not_in: [Float!]
+  numberOfBathrooms_lt: Float
+  numberOfBathrooms_lte: Float
+  numberOfBathrooms_gt: Float
+  numberOfBathrooms_gte: Float
+  numberOfBedrooms: Int
+  numberOfBedrooms_not: Int
+  numberOfBedrooms_in: [Int!]
+  numberOfBedrooms_not_in: [Int!]
+  numberOfBedrooms_lt: Int
+  numberOfBedrooms_lte: Int
+  numberOfBedrooms_gt: Int
+  numberOfBedrooms_gte: Int
+  numberOfRooms: Float
+  numberOfRooms_not: Float
+  numberOfRooms_in: [Float!]
+  numberOfRooms_not_in: [Float!]
+  numberOfRooms_lt: Float
+  numberOfRooms_lte: Float
+  numberOfRooms_gt: Float
+  numberOfRooms_gte: Float
   AND: [ListingWhereInput!]
   OR: [ListingWhereInput!]
   NOT: [ListingWhereInput!]
@@ -644,6 +685,12 @@ type Mutation {
   upsertNeighborhood(where: NeighborhoodWhereUniqueInput!, create: NeighborhoodCreateInput!, update: NeighborhoodUpdateInput!): Neighborhood!
   deleteNeighborhood(where: NeighborhoodWhereUniqueInput!): Neighborhood
   deleteManyNeighborhoods(where: NeighborhoodWhereInput): BatchPayload!
+  createPropertyType(data: PropertyTypeCreateInput!): PropertyType!
+  updatePropertyType(data: PropertyTypeUpdateInput!, where: PropertyTypeWhereUniqueInput!): PropertyType
+  updateManyPropertyTypes(data: PropertyTypeUpdateManyMutationInput!, where: PropertyTypeWhereInput): BatchPayload!
+  upsertPropertyType(where: PropertyTypeWhereUniqueInput!, create: PropertyTypeCreateInput!, update: PropertyTypeUpdateInput!): PropertyType!
+  deletePropertyType(where: PropertyTypeWhereUniqueInput!): PropertyType
+  deleteManyPropertyTypes(where: PropertyTypeWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -787,6 +834,130 @@ type PageInfo {
   endCursor: String
 }
 
+type PropertyType {
+  id: ID!
+  name: String!
+}
+
+type PropertyTypeConnection {
+  pageInfo: PageInfo!
+  edges: [PropertyTypeEdge]!
+  aggregate: AggregatePropertyType!
+}
+
+input PropertyTypeCreateInput {
+  name: String!
+}
+
+input PropertyTypeCreateOneInput {
+  create: PropertyTypeCreateInput
+  connect: PropertyTypeWhereUniqueInput
+}
+
+type PropertyTypeEdge {
+  node: PropertyType!
+  cursor: String!
+}
+
+enum PropertyTypeOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PropertyTypePreviousValues {
+  id: ID!
+  name: String!
+}
+
+type PropertyTypeSubscriptionPayload {
+  mutation: MutationType!
+  node: PropertyType
+  updatedFields: [String!]
+  previousValues: PropertyTypePreviousValues
+}
+
+input PropertyTypeSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PropertyTypeWhereInput
+  AND: [PropertyTypeSubscriptionWhereInput!]
+  OR: [PropertyTypeSubscriptionWhereInput!]
+  NOT: [PropertyTypeSubscriptionWhereInput!]
+}
+
+input PropertyTypeUpdateDataInput {
+  name: String
+}
+
+input PropertyTypeUpdateInput {
+  name: String
+}
+
+input PropertyTypeUpdateManyMutationInput {
+  name: String
+}
+
+input PropertyTypeUpdateOneInput {
+  create: PropertyTypeCreateInput
+  update: PropertyTypeUpdateDataInput
+  upsert: PropertyTypeUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PropertyTypeWhereUniqueInput
+}
+
+input PropertyTypeUpsertNestedInput {
+  update: PropertyTypeUpdateDataInput!
+  create: PropertyTypeCreateInput!
+}
+
+input PropertyTypeWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [PropertyTypeWhereInput!]
+  OR: [PropertyTypeWhereInput!]
+  NOT: [PropertyTypeWhereInput!]
+}
+
+input PropertyTypeWhereUniqueInput {
+  id: ID
+  name: String
+}
+
 type Query {
   address(where: AddressWhereUniqueInput!): Address
   addresses(where: AddressWhereInput, orderBy: AddressOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Address]!
@@ -800,6 +971,9 @@ type Query {
   neighborhood(where: NeighborhoodWhereUniqueInput!): Neighborhood
   neighborhoods(where: NeighborhoodWhereInput, orderBy: NeighborhoodOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Neighborhood]!
   neighborhoodsConnection(where: NeighborhoodWhereInput, orderBy: NeighborhoodOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NeighborhoodConnection!
+  propertyType(where: PropertyTypeWhereUniqueInput!): PropertyType
+  propertyTypes(where: PropertyTypeWhereInput, orderBy: PropertyTypeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PropertyType]!
+  propertyTypesConnection(where: PropertyTypeWhereInput, orderBy: PropertyTypeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PropertyTypeConnection!
   node(id: ID!): Node
 }
 
@@ -808,6 +982,7 @@ type Subscription {
   building(where: BuildingSubscriptionWhereInput): BuildingSubscriptionPayload
   listing(where: ListingSubscriptionWhereInput): ListingSubscriptionPayload
   neighborhood(where: NeighborhoodSubscriptionWhereInput): NeighborhoodSubscriptionPayload
+  propertyType(where: PropertyTypeSubscriptionWhereInput): PropertyTypeSubscriptionPayload
 }
 `
       }

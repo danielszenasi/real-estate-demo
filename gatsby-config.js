@@ -1,4 +1,8 @@
 var proxy = require("http-proxy-middleware")
+const typeDefs = require("./server/src/index/schema");
+const { buildSchema } = require("graphql")
+
+const dev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
 module.exports = {
   siteMetadata: {
@@ -9,6 +13,20 @@ module.exports = {
   plugins: [
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sass',
+    {
+      resolve: "gatsby-source-graphql",
+      options: {
+        // This type will contain remote schema Query type
+        typeName: "REALESTATE",
+        // This is field under which it's accessible
+        fieldName: "realestate",
+        // Url to query from
+        url: dev ? "http://localhost:4000" : "/.netlify/functions/index",
+        createSchema: async () => {
+          return buildSchema(typeDefs)
+        },
+      },
+    },
     {
       // keep as first gatsby-source-filesystem plugin for gatsby image support
       resolve: 'gatsby-source-filesystem',

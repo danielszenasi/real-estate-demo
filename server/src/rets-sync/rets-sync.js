@@ -30,15 +30,63 @@ exports.handler = function (event, context, callback) {
                         unit: listing.UnitNumber,
                         city: listing.City,
                     }
-                    return prisma.createListing({
+
+                    let newListing = {
                         address: { create: { ...address } },
-                        building: { create: { name: listing.BuildingName } },
-                        neighborhood: { create: { name: listing.Neighborhood } },
                         description: listing.MarketingDescription,
                         price: parseFloat(listing.OriginalPrice),
-                        propertyType: listing.PropertyType,
                         yearBuilt: parseInt(listing.YearBuilt),
-                    })
+                    }
+
+                    const buildingExists = await prisma.$exists.building({
+                        name: listing.BuildingName
+                    });
+
+                    if (buildingExists) {
+                        newListing = {
+                            ...newListing,
+                            building: { connect: { name: listing.BuildingName } },
+                        }
+                    } else {
+                        newListing = {
+                            ...newListing,
+                            building: { create: { name: listing.BuildingName } },
+                        }
+                    }
+
+                    const neighborhoodExists = await prisma.$exists.neighborhood({
+                        name: listing.Neighborhood
+                    });
+
+                    if (neighborhoodExists) {
+                        newListing = {
+                            ...newListing,
+                            neighborhood: { connect: { name: listing.Neighborhood } },
+                        }
+                    } else {
+                        newListing = {
+                            ...newListing,
+                            neighborhood: { create: { name: listing.Neighborhood } },
+                        }
+                    }
+
+                    const propertyTypeExists = await prisma.$exists.propertyType({
+                        name: listing.PropertyType
+                    });
+
+                    if (propertyTypeExists) {
+                        newListing = {
+                            ...newListing,
+                            propertyType: { connect: { name: listing.PropertyType, } },
+                        }
+                    } else {
+                        newListing = {
+                            ...newListing,
+                            propertyType: { create: { name: listing.PropertyType, } },
+                        }
+                    }
+
+                    return prisma.createListing(newListing)
                 }
 
 
