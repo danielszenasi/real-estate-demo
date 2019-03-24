@@ -29,13 +29,13 @@ ListingsPageTemplate.propTypes = {
 const ListingsPage = ({ data }) => {
     console.log(data);
 
-    const { listings } = data.realestate;
+    // const { listings } = data.realestate;
 
     return (
         <Layout>
-            <ListingsPageTemplate
+            {/* <ListingsPageTemplate
                 listings={listings}
-            />
+            /> */}
         </Layout>
     )
 }
