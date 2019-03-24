@@ -27,7 +27,7 @@ type Listing {
   address: Address
   building: Building
   neighborhood: Neighborhood
-  images: Json
+  images: String
   numberOfBathrooms: Float
   numberOfBedrooms: Int
   numberOfRooms: Float
