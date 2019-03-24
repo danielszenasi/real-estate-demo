@@ -16,7 +16,7 @@ module.exports = {
                 })
                 .address();
         },
-        priceFormatted: parent => numeral(1000).format('$0,0.00'),
+        priceFormatted: parent => numeral(parent.price).format('$ 0,0[.]00'),
     },
     Address: {
         display: parent => {
