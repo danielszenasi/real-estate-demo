@@ -23,7 +23,7 @@ exports.handler = function (event, context, callback) {
                 const insert = async listing => {
                     const parsed = parserAddress.parseLocation(listing.Address);
 
-                    const buildingExists = await prisma.$exists.address({
+                    const addressExists = await prisma.$exists.address({
                         AND: {
                             unit: listing.UnitNumber,
                             latitude: parseFloat(listing.Latitude),
@@ -31,7 +31,7 @@ exports.handler = function (event, context, callback) {
                         }
                     });
 
-                    if (buildingExists) {
+                    if (addressExists) {
                         return false;
                     }
 
