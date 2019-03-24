@@ -42,7 +42,7 @@ exports.handler = function (event, context, callback) {
                         longitude: parseFloat(listing.Longitude),
                         unit: listing.UnitNumber,
                         city: listing.City,
-                        images: listing.ImageListOriginal.split(','),
+                        images: JSON.stringify(listing.ImageListOriginal.split(',')),
                         numberOfBathrooms: parseFloat(listing.NumBaths),
                         numberOfBedrooms: parseInt(listing.NumBedrooms),
                         numberOfRooms: parseFloat(listing.NumRooms),
