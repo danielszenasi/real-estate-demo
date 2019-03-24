@@ -38,8 +38,10 @@ exports.handler = function (event, context, callback) {
                     })
                 }
 
+
                 searchData.results.reduce(async (previousPromise, listing) => {
                     await previousPromise;
+                    console.log(listing)
                     return insert(listing);
                 }, Promise.resolve());
 
