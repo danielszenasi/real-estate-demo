@@ -26,6 +26,7 @@ type Listing {
   address: Address
   building: Building
   neighborhood: Neighborhood
+  priceFormatted: String
 }
 
 type Building {
