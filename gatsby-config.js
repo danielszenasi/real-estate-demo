@@ -21,7 +21,7 @@ module.exports = {
         // This is field under which it's accessible
         fieldName: "realestate",
         // Url to query from
-        url: dev ? "http://localhost:4000" : "/.netlify/functions/index",
+        url: dev ? "http://localhost:4000" : "https://wizardly-bhabha-0f7549.netlify.com/.netlify/functions/index",
         createSchema: async () => {
           return buildSchema(typeDefs)
         },
