@@ -20,14 +20,14 @@ exports.handler = function (event, context, callback) {
         client.search.query("Listing", "Listing", "(BuildingPets=1)", { limit: 100, offset: 0 })
             .then(function (searchData) {
 
-                const insert = async listing => {
+                const insert = listing => {
                     const parsed = parserAddress.parseLocation(listing.Address);
                     const address = {
                         ...parsed,
                         zip: listing.Zip,
-                        latitude: listing.Latitude,
+                        latitude: parseFloat(listing.Latitude),
                         longitude: parseFloat(listing.Longitude),
-                        number: parseFloat(listing.UnitNumber)
+                        number: listing.UnitNumber
                     }
                     return prisma.createListing({
                         address: { create: { ...address } },
