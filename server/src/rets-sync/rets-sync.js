@@ -22,6 +22,19 @@ exports.handler = function (event, context, callback) {
 
                 const insert = async listing => {
                     const parsed = parserAddress.parseLocation(listing.Address);
+
+                    const buildingExists = await prisma.$exists.address({
+                        AND: {
+                            unit: listing.UnitNumber,
+                            latitude: parseFloat(listing.Latitude),
+                            longitude: parseFloat(listing.Longitude)
+                        }
+                    });
+
+                    if (buildingExists) {
+                        return false;
+                    }
+
                     const address = {
                         ...parsed,
                         zip: listing.Zip,
@@ -29,6 +42,10 @@ exports.handler = function (event, context, callback) {
                         longitude: parseFloat(listing.Longitude),
                         unit: listing.UnitNumber,
                         city: listing.City,
+                        images: listing.ImageListOriginal.split(','),
+                        numberOfBathrooms: parseFloat(listing.NumBaths),
+                        numberOfBedrooms: parseInt(listing.NumBedrooms),
+                        numberOfRooms: parseFloat(listing.NumRooms),
                     }
 
                     let newListing = {
@@ -92,7 +109,6 @@ exports.handler = function (event, context, callback) {
 
                 searchData.results.reduce(async (previousPromise, listing) => {
                     await previousPromise;
-                    console.log(listing)
                     return insert(listing);
                 }, Promise.resolve());
 

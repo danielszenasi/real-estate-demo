@@ -1,4 +1,6 @@
 module.exports = /* GraphQL */ `
+  scalar JSON
+
   type Query {
     listings: [Listing!]!
   }
@@ -27,7 +29,7 @@ type Listing {
   address: Address
   building: Building
   neighborhood: Neighborhood
-  images: String
+  images: JSON
   numberOfBathrooms: Float
   numberOfBedrooms: Int
   numberOfRooms: Float

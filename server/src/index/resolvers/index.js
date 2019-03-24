@@ -1,9 +1,13 @@
+const GraphQLJSON = require('graphql-type-json');
+const numeral = require('numeral');
+
 module.exports = {
     Query: {
         listings: (parent, args, context) => {
             return context.prisma.listings();
         }
     },
+    JSON: GraphQLJSON,
     Listing: {
         address: (parent, { id }, context) => {
             return context.prisma
