@@ -20,7 +20,7 @@ exports.handler = function (event, context, callback) {
         client.search.query("Listing", "Listing", "(BuildingPets=1)", { limit: 100, offset: 0 })
             .then(function (searchData) {
 
-                const insert = listing => {
+                const insert = async listing => {
                     const parsed = parserAddress.parseLocation(listing.Address);
                     const address = {
                         ...parsed,
