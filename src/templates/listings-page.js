@@ -29,13 +29,13 @@ ListingsPageTemplate.propTypes = {
 const ListingsPage = ({ data }) => {
     console.log(data);
 
-    // const { listings } = data.realestate;
+    const { listings } = data.realestate;
 
     return (
         <Layout>
-            {/* <ListingsPageTemplate
+            <ListingsPageTemplate
                 listings={listings}
-            /> */}
+            />
         </Layout>
     )
 }
@@ -50,16 +50,16 @@ const ListingsPage = ({ data }) => {
 
 export default ListingsPage
 
-// export const pageQuery = graphql`
-//     query {
-//     realestate {
-//       listings {
-//         id
-//         priceFormatted
-//         address {
-//             display
-//         }
-//       }
-//     }
-//   }
-// `
+export const pageQuery = graphql`
+    query {
+    realestate {
+      listings {
+        id
+        priceFormatted
+        address {
+            display
+        }
+      }
+    }
+  }
+`
