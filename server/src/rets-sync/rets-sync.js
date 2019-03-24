@@ -42,10 +42,6 @@ exports.handler = function (event, context, callback) {
                         longitude: parseFloat(listing.Longitude),
                         unit: listing.UnitNumber,
                         city: listing.City,
-                        images: JSON.stringify(listing.ImageListOriginal.split(',')),
-                        numberOfBathrooms: parseFloat(listing.NumBaths),
-                        numberOfBedrooms: parseInt(listing.NumBedrooms),
-                        numberOfRooms: parseFloat(listing.NumRooms),
                     }
 
                     let newListing = {
@@ -53,6 +49,10 @@ exports.handler = function (event, context, callback) {
                         description: listing.MarketingDescription,
                         price: parseFloat(listing.OriginalPrice),
                         yearBuilt: parseInt(listing.YearBuilt),
+                        images: listing.ImageListOriginal.split(','),
+                        numberOfBathrooms: parseFloat(listing.NumBaths),
+                        numberOfBedrooms: parseInt(listing.NumBedrooms),
+                        numberOfRooms: parseFloat(listing.NumRooms),
                     }
 
                     const buildingExists = await prisma.$exists.building({
