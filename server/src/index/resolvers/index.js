@@ -1,6 +1,6 @@
 const GraphQLJSON = require('graphql-type-json');
 const numeral = require('numeral');
-// priceFormatted: parent => numeral(parent.price).format('$ 0,0[.]00'),
+
 module.exports = {
     Query: {
         listings: (parent, args, context) => {
@@ -16,7 +16,7 @@ module.exports = {
                 })
                 .address();
         },
-        priceFormatted: parent => parent.price,
+        priceFormatted: parent => numeral(parent.price).format('$ 0,0[.]00'),
     },
     Address: {
         display: parent => {

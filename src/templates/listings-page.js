@@ -50,16 +50,16 @@ const ListingsPage = ({ data }) => {
 
 export default ListingsPage
 
-export const pageQuery = graphql`
-    query {
-    realestate {
-      listings {
-        id
-        priceFormatted
-        address {
-            display
-        }
-      }
-    }
-  }
-`
+// export const pageQuery = graphql`
+//     query {
+//     realestate {
+//       listings {
+//         id
+//         priceFormatted
+//         address {
+//             display
+//         }
+//       }
+//     }
+//   }
+// `
