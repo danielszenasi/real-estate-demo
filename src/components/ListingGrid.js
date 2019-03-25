@@ -136,35 +136,34 @@ ListingGrid.propTypes = {
     }),
 }
 
-// export default () => (
-//     <StaticQuery
-//         query={graphql`
-//       query ListingsQuery {
-//         realestate {
-//         neighborhoods {
-//             id
-//             name
-//         }
-//         propertyTypes {
-//             id
-//             name
-//         }
-//         listings {
-//             id
-//             priceFormatted
-//             neighborhood { name }
-//             propertyType { name }
-//             numberOfBedrooms
-//             numberOfBathrooms
-//             images
-//             address {
-//                 display
-//             }
-//         }
-//         }
-//       }
-//     `}
-//         render={(data) => <ListingGrid data={data} />}
-//     />
-// )
-export default () => 'hello'
+export default () => (
+    <StaticQuery
+        query={graphql`
+      query ListingsQuery {
+        realestate {
+        neighborhoods {
+            id
+            name
+        }
+        propertyTypes {
+            id
+            name
+        }
+        listings {
+            id
+            priceFormatted
+            neighborhood { name }
+            propertyType { name }
+            numberOfBedrooms
+            numberOfBathrooms
+            images
+            address {
+                display
+            }
+        }
+        }
+      }
+    `}
+        render={(data) => <ListingGrid data={data} />}
+    />
+)
